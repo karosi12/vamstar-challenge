@@ -11,8 +11,8 @@ const serverlessConfiguration: Serverless = {
   custom: {
     webpack: {
       webpackConfig: './webpack.config.js',
-      includeModules: true
-    }
+      includeModules: true,
+    },
   },
   // Add the serverless-webpack plugin
   plugins: ['serverless-webpack'],
@@ -25,20 +25,58 @@ const serverlessConfiguration: Serverless = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
     },
+    iamManagedPolicies: [
+      'arn:aws:iam::aws:policy/AmazonSQSFullAccess',
+      'arn:aws:iam::aws:policy/AmazonSESFullAccess',
+      'arn:aws:iam::aws:policy/AmazonSNSFullAccess',
+    ],
   },
   functions: {
-    hello: {
-      handler: 'handler.hello',
+    ping: {
+      handler: 'api/handler.ping',
       events: [
         {
           http: {
             method: 'get',
-            path: 'hello',
-          }
-        }
-      ]
-    }
-  }
-}
+            path: '/',
+          },
+        },
+      ],
+    },
+    addMsgToQueue: {
+      handler: 'api/handler.addMsgToQueue',
+      events: [
+        {
+          http: {
+            method: 'post',
+            path: 'send_to_queue',
+          },
+        },
+      ],
+    },
+    fetchDataFromQueue: {
+      handler: 'api/handler.fetchDataFromQueue',
+      events: [
+        {
+          http: {
+            method: 'get',
+            path: 'queues',
+          },
+        },
+      ],
+    },
+    sendNotification: {
+      handler: 'api/handler.sendNotification',
+      events: [
+        {
+          http: {
+            method: 'get',
+            path: 'send_notification',
+          },
+        },
+      ],
+    },
+  },
+};
 
 module.exports = serverlessConfiguration;
