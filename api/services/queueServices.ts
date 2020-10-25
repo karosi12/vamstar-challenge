@@ -13,8 +13,6 @@ export const sendDataToSQS = async (data: IMessageBody): Promise<IResponse> => {
       })
       .promise();
     console.log(`Message put on queue`, response);
-    // return { message: 'Message put on queue', data: response };
-    // const notificationResponse = await sendNotification({ message: data.message, phoneNumber: data.phoneNumber });
     return { message: 'Message added to queue', data: response };
   } catch (e) {
     console.log('Exception on queue', e);
