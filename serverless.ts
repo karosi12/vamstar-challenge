@@ -25,15 +25,27 @@ const serverlessConfiguration: Serverless = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
     },
+    iamManagedPolicies: ['arn:aws:iam::aws:policy/AmazonSQSFullAccess'],
   },
   functions: {
-    hello: {
+    ping: {
       handler: 'api/handler.ping',
       events: [
         {
           http: {
             method: 'get',
             path: '/',
+          },
+        },
+      ],
+    },
+    addMsgToQueue: {
+      handler: 'api/handler.addMsgToQueue',
+      events: [
+        {
+          http: {
+            method: 'post',
+            path: 'send_to_queue',
           },
         },
       ],
