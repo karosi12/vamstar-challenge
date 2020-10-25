@@ -1,7 +1,5 @@
 import { APIGatewayProxyHandler, APIGatewayEvent, Context, Callback } from 'aws-lambda';
 import IMessageBody from './interfaces';
-// import INotificationEmailBody from './interfaces';
-// import INotificationSMSBody from './interfaces';
 import { sendDataToSQS, recieveFromQueue } from './services/queueServices';
 import { sendViaSMS, sendViaEmail } from './services/notificationService';
 import 'source-map-support/register';
