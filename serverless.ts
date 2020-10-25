@@ -25,7 +25,11 @@ const serverlessConfiguration: Serverless = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
     },
-    iamManagedPolicies: ['arn:aws:iam::aws:policy/AmazonSQSFullAccess'],
+    iamManagedPolicies: [
+      'arn:aws:iam::aws:policy/AmazonSQSFullAccess',
+      'arn:aws:iam::aws:policy/AmazonSESFullAccess',
+      'arn:aws:iam::aws:policy/AmazonSNSFullAccess',
+    ],
   },
   functions: {
     ping: {
@@ -57,6 +61,17 @@ const serverlessConfiguration: Serverless = {
           http: {
             method: 'get',
             path: 'queues',
+          },
+        },
+      ],
+    },
+    sendNotification: {
+      handler: 'api/handler.sendNotification',
+      events: [
+        {
+          http: {
+            method: 'get',
+            path: 'send_notification',
           },
         },
       ],
