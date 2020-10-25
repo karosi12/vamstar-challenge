@@ -19,3 +19,16 @@ export const sendDataToSQS = async (data: IMessageBody): Promise<IResponse> => {
     return { message: 'Exception on queue', data: e };
   }
 };
+
+export const recieveFromQueue = async (): Promise<any> => {
+  const params = { QueueUrl: queueURL, VisibilityTimeout: 600 };
+  try {
+    const response = await sqs.receiveMessage(params).promise();
+    return {
+      message: 'Message received',
+      data: { messageId: response.Messages[0].MessageId, data: JSON.parse(response.Messages[0].Body) },
+    };
+  } catch (error) {
+    return { message: 'unable to fetch data', data: error };
+  }
+};

@@ -1,7 +1,8 @@
 import { APIGatewayProxyHandler, APIGatewayEvent, Context, Callback } from 'aws-lambda';
 import IMessageBody from './interfaces';
-import { sendDataToSQS } from './services/queueServices';
+import { sendDataToSQS, recieveFromQueue } from './services/queueServices';
 import 'source-map-support/register';
+
 export const ping: APIGatewayProxyHandler = async (
   event: APIGatewayEvent,
   _context: Context,
@@ -33,3 +34,18 @@ export const addMsgToQueue: APIGatewayProxyHandler = async (
     callback(null, { statusCode: 500, body: JSON.stringify({ message: 'Internal server error' }) });
   }
 };
+
+export const fetchDataFromQueue: APIGatewayProxyHandler = async (
+  event: APIGatewayEvent,
+  _context: Context,
+  callback: Callback,
+): Promise<any> => {
+  try {
+    const { data, message } = await recieveFromQueue();
+    if (Object.keys(data).length === 0) callback(null, { statusCode: 400, body: JSON.stringify({ message }) });
+    callback(null, { statusCode: 200, body: JSON.stringify({ message, data }) });
+  } catch (error) {
+    callback(null, { statusCode: 500, body: JSON.stringify({ message: 'Internal server error' }) });
+  }
+};
+

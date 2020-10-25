@@ -50,6 +50,17 @@ const serverlessConfiguration: Serverless = {
         },
       ],
     },
+    fetchDataFromQueue: {
+      handler: 'api/handler.fetchDataFromQueue',
+      events: [
+        {
+          http: {
+            method: 'get',
+            path: 'queues',
+          },
+        },
+      ],
+    },
   },
 };
 
